@@ -1,18 +1,18 @@
 game.PlayerEntity = me.Entity.extend({
     init: function(x, y, settings) {
         this._super(me.Entity, 'init', [x, y, {
-                //all this makes sure that the sprite works
+                //makes the sprite work
                 image: "player",
                 width: 64,
                 height: 64,
                 spritewidth: "64",
                 spritheight: "64",
                 getShape: function() {
-                    return(new me.Rect(0, 0, 64, 64)).toPolygon();//zeros are top corners and the two sixty fours are the width and the height
+                    return(new me.Rect(0, 0, 64, 64)).toPolygon(); //zeros are top corners and the two sixty fours are the width and the height
                 }
             }]);
         
-        this.body.setVelocity(5, 20);//sets the velocity for the key binded
+        this.body.setVelocity(5, 20);  //sets the velocity for the key binded
         
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 
@@ -25,7 +25,8 @@ game.PlayerEntity = me.Entity.extend({
     
     update: function(delta) {
         if (me.input.isKeyPressed("right")) {
-            //adds to the position of my x by the velocity defined above in setVelocity() and multaplying it by me.timer.tick
+            //adds to the position of my x by the velocity defined above in setVelocity() 
+            //and multiplying it by me.timer.tick
             //me.timer.tick makes the movement look smooth
             this.body.vel.x += this.body.accel.x * me.timer.tick;
             this.flipX(true);
@@ -39,13 +40,14 @@ game.PlayerEntity = me.Entity.extend({
                 console.log(!this.renderable.isCurrentAnimation("attack"));
                 //sets the current animation to attack and once that is over, goes back to the idle animation 
                 this.renderable.setCurrentAnimation("attack", "idle");
-                //Makes it so that the next time that we will start this sequence we begin from the first animation, not where ever we left off when we switched to another animation
+                //Makes it so that the next time that we will start this sequence we begin from the first animation
+                // not where ever we left off when we switched to another animation
                 this.renderable.setAnimationFrame();
             }
         }
 
         else if (this.body.vel.x !== 0) {
-            if (!this.renderable.isCurrentAnimation("walk")) {//if it is walk, it sets it to walk
+            if (!this.renderable.isCurrentAnimation("walk")) {  //if it is walk, it sets it to walk
                 this.renderable.setCurrentAnimation("walk");
             }
         } else {
@@ -62,7 +64,7 @@ game.PlayerEntity = me.Entity.extend({
             }
         }
 
-        this.body.update(delta);//updates the isKeyPressed()
+        this.body.update(delta);  //updates the isKeyPressed()
 
         this._super(me.Entity, "update", [delta]);
         return true;
