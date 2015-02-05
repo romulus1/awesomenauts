@@ -1,4 +1,3 @@
-
 /* Game namespace */
 var game = {
 
@@ -12,7 +11,7 @@ var game = {
 	// Run on page load.
 	"onload" : function () {
 	// Initialize the video.
-	if (!me.video.init("screen",  me.video.CANVAS, 1067, 600, true, '1.0')) { // 1067 and 600 is for our screen
+	if (!me.video.init("screen",  me.video.CANVAS, 1067, 600, true, '1.0')) {
 		alert("Your browser does not support HTML5 canvas.");
 		return;
 	}
@@ -38,11 +37,11 @@ var game = {
 },
 
 	// Run on game resources loaded.
-	"loaded" : function () {
-                me.pool.register("player", game.PlayerEntity, true);
-                me.pool.register("PlayerBase", game.PlayerBaseEntity);
-                me.pool.register("EnemyBase", game.EnemyBaseEntity);
-                
+	"loaded" : function() {
+		me.pool.register("player", game.PlayerEntity, true);//registered player to the pool
+		me.pool.register("PlayerBase", game.PlayerBaseEntity);
+		me.pool.register("EnemyBase", game.EnemyBaseEntity);
+
 		me.state.set(me.state.MENU, new game.TitleScreen());
 		me.state.set(me.state.PLAY, new game.PlayScreen());
 
