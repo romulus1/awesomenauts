@@ -10,6 +10,7 @@ game.PlayerEntity = me.Entity.extend({
                     return(new me.Rect(0, 0, 64, 64)).toPolygon(); //zeros are top corners and the two sixty fours are the width and the height
                 }
             }]);
+        
         this.body.setVelocity(5, 20);//sets the velocity for the key binded keeps track of what direction your character is going
         this.facing = "right";
         this.now = new Date().getTime();
@@ -142,8 +143,6 @@ game.PlayerBaseEntity = me.Entity.extend({
 
 });
 
-
-
 game.EnemyBaseEntity = me.Entity.extend({
     init: function(x, y, settings) {
         this._super(me.Entity, 'init', [x, y, {
@@ -206,7 +205,7 @@ game.EnemyCreep = me.Entity.extend({
         this.health = 10;
         this.alwaysUpdate = true;
 
-        this.setVelocity(3, 20);
+        this.body.setVelocity(3, 20);
 
         this.type = "EnemyCreep";
 
@@ -218,4 +217,24 @@ game.EnemyCreep = me.Entity.extend({
 
     }
 
+});
+
+game.GameManager = Object.extend({
+   init: function(x, y, settings) {
+       this.now = new Date().getTime();
+       this.lastCreep = new Date().getTime();
+       
+       this.alwaysUpdate = true;
+   },
+   
+   update: function(){
+       this.now = new Date().getTime();
+       
+       if(Math.round(this.now/1000)%10 ===0 && (this.now - this.lastCreep >= 1000)){
+           this.lastCreep = this.now;
+           var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
+           me.game.world.addChild(creepe, 5);
+       }
+   }
+   
 });
