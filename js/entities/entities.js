@@ -19,6 +19,7 @@ game.PlayerEntity = me.Entity.extend({
         this.renderable.addAnimation("idle", [78]);
         this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 123, 124, 125], 80);
         this.renderable.addAnimation("attack", [65, 66, 67, 68, 69, 70, 71, 72], 80);
+        this.renderable.addAnimation("left", [82, 83, 84, 85, 86, 87, 88, 89, 90], 80);
 
         this.renderable.setCurrentAnimation("idle");
     },
@@ -30,8 +31,19 @@ game.PlayerEntity = me.Entity.extend({
             //me.timer.tick makes the movement look smooth
             this.body.vel.x += this.body.accel.x * me.timer.tick;
             this.flipX(true);
-        } else {
+        }else if (me.input.isKeyPressed("left")) {
+            //adds to the position of my x by the velocity defined above in setVelocity() 
+            //and multiplying it by me.timer.tick
+            //me.timer.tick makes the movement look smooth
+            this.body.vel.x -= this.body.accel.x * me.timer.tick;
+            this.flipX(false); //makes the sprite flip
+        }else {
             this.body.vel.x = 0;//makes velocity zero
+        }
+        
+        if(me.input.isKeyPressed("jump") && !this.jumping && !this.falling){
+            me.jumping = true;
+            this.body.vel.y -= this.body.accel.y * me.timer.tick;
         }
 
         //two of the attack if/else makes the animation smoother
@@ -82,7 +94,7 @@ game.PlayerBaseEntity = me.Entity.extend({
                 spritewidth: "100",
                 spritheight: "100",
                 getShape: function() {
-                    return (new me.Rect(0, 0, 100, 100)).toPolygon();
+                    return (new me.Rect(0, 0, 100, 70)).toPolygon();
                 }
 
             }]);
@@ -124,7 +136,7 @@ game.EnemyBaseEntity = me.Entity.extend({
                 spritewidth: 100,
                 spritheight: 100,
                 getShape: function() {
-                    return (new me.Rect(0, 0, 100, 100)).toPolygon();
+                    return (new me.Rect(0, 0, 100, 70)).toPolygon(); //makes the towers postion
                 }
 
             }]);
