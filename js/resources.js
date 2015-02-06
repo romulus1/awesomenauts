@@ -8,7 +8,7 @@ game.resources = [
 	 {name: "meta-tiles", type:"image", src: "data/img/meta-tiles.png"},
 	 {name: "player", type:"image", src: "data/img/orcSpear.png"},
 	 {name: "tower", type:"image", src: "data/img/tower_round.svg.png"},
-         {name: "creep1", type:"image", src: "data/img/brainmonster.png"},
+	 {name: "creep1", type:"image", src: "data/img/brainmonster.png"},
 
 	/* Atlases 
 	 * @example
@@ -20,7 +20,7 @@ game.resources = [
 	 * {name: "example01", type: "tmx", src: "data/map/example01.tmx"},
 	 * {name: "example01", type: "tmx", src: "data/map/example01.json"},
  	 */
- 	 {name: "level01", type: "tmx", src: "data/map/untitled.tmx"}
+ 	 {name: "level01", type: "tmx", src: "data/map/untitled.tmx"},
 
 	/* Background music. 
 	 * @example
