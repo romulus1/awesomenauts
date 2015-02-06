@@ -15,6 +15,9 @@ game.PlayerEntity = me.Entity.extend({
         this.body.setVelocity(5, 20);  //sets the velocity for the key binded
         //Keeps track of which direction your character is going
         this.facing = "right";
+        this.now = new Date().getTime();
+        this.lastHit = this.now;
+        this.lastAttack = new Date().getTime();
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 
         this.renderable.addAnimation("idle", [78]);
@@ -26,6 +29,7 @@ game.PlayerEntity = me.Entity.extend({
     },
     
     update: function(delta) {
+        this.now = new Date().getTime();
         if (me.input.isKeyPressed("right")) {
             //adds to the position of my x by the velocity defined above in setVelocity() 
             //and multiplying it by me.timer.tick
@@ -61,22 +65,12 @@ game.PlayerEntity = me.Entity.extend({
             }
         }
 
-        else if (this.body.vel.x !== 0) {
+        else if (this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) {
             if (!this.renderable.isCurrentAnimation("walk")) {  //if it is walk, it sets it to walk
                 this.renderable.setCurrentAnimation("walk");
             }
-        } else {
+        } else if(!this.renderable.isCurrentAnimation("attack")){
             this.renderable.setCurrentAnimation("idle");
-        }
-
-        if (me.input.isKeyPressed("attack")) {
-            if (!this.renderable.isCurrentAnimation("attack")) {
-                console.log(!this.renderable.isCurrentAnimation("attack"));
-                //sets the current animation to attack and once that is over, goes back to the idle animation 
-                this.renderable.setCurrentAnimation("attack", "idle");
-                //Makes it so that the next time that we will start this sequence we begin from the first animation, not where ever we left off when we switched to another animation
-                this.renderable.setAnimationFrame();
-            }
         }
         
         me.collision.check(this, true, this.collideHandler.bind(this), true); //passes a parameter
@@ -91,9 +85,9 @@ game.PlayerEntity = me.Entity.extend({
             var ydif = this.pos.y - response.b.pos.y;
             var xdif = this.pos.x - response.b.pos.x;
             
-            console.log("xdif " + xdif + " ydif " + ydif);
+            //console.log("xdif " + xdif + " ydif " + ydif);
             
-            if(ydif<-40){
+            if(ydif<-40 && xdif< 70 && xdif>-35){
                 this.body.falling = false;
                 this.body.vel.y = -1;
             }
@@ -103,6 +97,12 @@ game.PlayerEntity = me.Entity.extend({
             } else if(xdif<70 && this.facing==='left' && xdif>0){
                 this.body.vel.x = 0;
                 this.pos.x = this.pos.x +1;
+            }
+            
+            if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000){
+                console.log("tower hit");
+                this.lastHit = this.now;
+                response.b.loseHealth();
             }
         }
     }
@@ -165,7 +165,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 
             }]);
         this.broken = false;
-        this.health = 10;
+        this.health = 1;
         this.alwaysUpdate = true;
         this.body.onCollision = this.onCollision.bind(this);
 
@@ -189,6 +189,10 @@ game.EnemyBaseEntity = me.Entity.extend({
     
     onCollision: function() {
 
+    },
+    
+    loseHealth: function(){
+        this.health--;
     }
 
 });
